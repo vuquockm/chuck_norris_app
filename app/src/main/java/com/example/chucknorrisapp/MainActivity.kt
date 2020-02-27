@@ -1,8 +1,10 @@
 package com.example.chucknorrisapp
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -10,5 +12,19 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         Log.d("sorted", JokeList.jokes.toString())
+        rvjokes.layoutManager = LinearLayoutManager(this)
+        val adapter=JokeAdapter()
+        rvjokes.adapter=adapter
+        adapter.jokes=JokeList.jokes
+
+
     }
+
+
+
+
+
+
+
+
 }

@@ -1,7 +1,7 @@
 package com.example.chucknorrisapp
 
 object JokeList {
-    var jokes = listOf("Chuck Norris went out of an infinite loop.",
+    val jokes = listOf("Chuck Norris went out of an infinite loop.",
         "Chuck Norris doesn't use a computer because a computer does " +
         "everything slower than Chuck Norris.",
         "Tom Clancy has to pay royalties to Chuck Norris because " +
