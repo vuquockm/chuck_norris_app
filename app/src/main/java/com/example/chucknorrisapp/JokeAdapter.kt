@@ -19,9 +19,8 @@ class JokeAdapter(private val jokes: List<String>) : RecyclerView.Adapter<JokeAd
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JokeViewHolder {
         // create a new view
-        val textView = TextView(parent.context)
-        //textView.setTextColor(520)
-        textView.setTextColor(Color.BLUE)
+        val textView = LayoutInflater.from(parent.context)
+            .inflate(R.layout.joke_layout, parent, false) as TextView
         // set the view's size, margins, paddings and layout parameters
 
         return JokeViewHolder(textView)
