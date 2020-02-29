@@ -1,31 +1,38 @@
 package com.example.chucknorrisapp
 
+import android.graphics.Color
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class JokeAdapter : RecyclerView.Adapter<JokeAdapter.JokeViewHolder>() {
+class JokeAdapter(private val jokes: List<String>) : RecyclerView.Adapter<JokeAdapter.JokeViewHolder>() {
 
-    var jokes = JokeList.jokes
+    /*var jokes = JokeList.jokes
         set(jokelist) {
             field=jokelist
             notifyDataSetChanged()
-        }
+        }*/
 
-    class JokeViewHolder(val t: TextView) : RecyclerView.ViewHolder(t) {
-    }
+    class JokeViewHolder(val t: TextView) : RecyclerView.ViewHolder(t)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JokeViewHolder {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        // create a new view
+        val textView = TextView(parent.context)
+        //textView.setTextColor(520)
+        textView.setTextColor(Color.BLUE)
+        // set the view's size, margins, paddings and layout parameters
+
+        return JokeViewHolder(textView)
     }
 
     override fun getItemCount(): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return jokes.size
     }
 
     override fun onBindViewHolder(holder: JokeViewHolder, position: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        holder.t.text=jokes[position]
     }
 
 

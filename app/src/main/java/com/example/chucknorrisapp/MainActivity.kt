@@ -13,11 +13,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         Log.d("sorted", JokeList.jokes.toString())
         rvjokes.layoutManager = LinearLayoutManager(this)
-        val adapter=JokeAdapter()
+        val adapter=JokeAdapter(JokeList.jokes)
         rvjokes.adapter=adapter
-        adapter.jokes=JokeList.jokes
-
-
     }
 
 
