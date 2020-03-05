@@ -15,7 +15,11 @@ class MainActivity : AppCompatActivity() {
         rvjokes.layoutManager = LinearLayoutManager(this)
         val adapter=JokeAdapter(JokeList.jokes)
         rvjokes.adapter=adapter
+
+
     }
+
+    //page 33 sur le slide
 
 
 

@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class JokeAdapter(private val jokes: List<String>) : RecyclerView.Adapter<JokeAdapter.JokeViewHolder>() {
+class JokeAdapter(private val jokes: List<Joke>) : RecyclerView.Adapter<JokeAdapter.JokeViewHolder>() {
 
     /*var jokes = JokeList.jokes
         set(jokelist) {
@@ -31,7 +31,7 @@ class JokeAdapter(private val jokes: List<String>) : RecyclerView.Adapter<JokeAd
     }
 
     override fun onBindViewHolder(holder: JokeViewHolder, position: Int) {
-        holder.t.text=jokes[position]
+        holder.t.text=jokes[position].value
     }
 
 
