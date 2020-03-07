@@ -7,7 +7,7 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 
 object JokeApiServiceFactory {
-    fun test():JokeApiService {
+    fun service():JokeApiService {
         val builder = Retrofit.Builder()
             .baseUrl("https://api.chucknorris.io/jokes/")
             .addConverterFactory(Json.asConverterFactory(MediaType.get("application/json")))

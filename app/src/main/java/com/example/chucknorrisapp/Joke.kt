@@ -5,6 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Joke(
+
     var categories: List<String> = emptyList(),
     @SerialName("created_at")
     var createdAt: String = "2020-01-05 13:42:29.296379",

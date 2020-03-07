@@ -27,7 +27,6 @@ class JokeSerializationTest {
     fun `serialization is correct`() {
         val json = Json(JsonConfiguration.Stable).stringify(Joke.serializer(), baseJoke)
         Assert.assertEquals(baseJson, json)
-
     }
 
     @Test

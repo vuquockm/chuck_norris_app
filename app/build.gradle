@@ -12,11 +12,15 @@ apply plugin: 'kotlin-android-extensions'
 
 
 android {
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
     defaultConfig {
         applicationId "com.example.chucknorrisapp"
-        minSdkVersion 26
+        minSdkVersion 15
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -43,7 +47,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
     implementation "androidx.recyclerview:recyclerview:1.1.0"
     implementation "androidx.recyclerview:recyclerview-selection:1.1.0-rc01"
-    implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.14.0" // JVM dependency
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.20.0" // JVM dependency
     implementation "com.squareup.retrofit2:retrofit:2.7.2"
     implementation "io.reactivex.rxjava2:rxjava:2.2.18"
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.7.2'

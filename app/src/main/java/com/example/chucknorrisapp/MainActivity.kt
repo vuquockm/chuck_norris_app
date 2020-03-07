@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -13,11 +14,16 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         Log.d("sorted", JokeList.jokes.toString())
         rvjokes.layoutManager = LinearLayoutManager(this)
+        val jokeService= JokeApiServiceFactory.service()
+        val status=jokeService.giveMeAJoke()/*.subscribeOn(Schedulers.io())
+            .subscribe(
+                { result ->  Log.d("onsuccess",result.toString())},
+                { error -> Log.e("TAG", "{$error.message}")}
+            )*/
+        //Log.d("joke",joke.toString())
         val list = JokeList.jokes.toJokes()
         val adapter=JokeAdapter(list)
         rvjokes.adapter=adapter
-
-
     }
 
 
