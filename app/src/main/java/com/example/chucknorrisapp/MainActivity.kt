@@ -13,11 +13,18 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         Log.d("sorted", JokeList.jokes.toString())
         rvjokes.layoutManager = LinearLayoutManager(this)
-        val adapter=JokeAdapter(JokeList.jokes)
+        val list = JokeList.jokes.toJokes()
+        val adapter=JokeAdapter(list)
         rvjokes.adapter=adapter
 
 
     }
+
+
+    //D’abord, comment transformer un String en Joke de test à l’aide d’une extension ?
+    fun String.toJoke() = Joke(createdAt = "test", iconUrl = "test",updatedAt = "test",url = "test",id = "test",value=this)
+
+    fun List<String>.toJokes() = map{it.toJoke()}
 
     //page 33 sur le slide
 
