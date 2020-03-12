@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
         Log.d("sorted", JokeList.jokes.toString())
         rvjokes.layoutManager = LinearLayoutManager(this)
         val jokeService= JokeApiServiceFactory.service()
-        val status=jokeService.giveMeAJoke()/*.subscribeOn(Schedulers.io())
+        /*val status=jokeService.giveMeAJoke()*//*.subscribeOn(Schedulers.io())
             .subscribe(
                 { result ->  Log.d("onsuccess",result.toString())},
                 { error -> Log.e("TAG", "{$error.message}")}
