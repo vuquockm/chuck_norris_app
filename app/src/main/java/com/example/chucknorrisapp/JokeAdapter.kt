@@ -1,21 +1,20 @@
 package com.example.chucknorrisapp
 
-import android.graphics.Color
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class JokeAdapter(private val jokes: List<Joke>) : RecyclerView.Adapter<JokeAdapter.JokeViewHolder>() {
 
-    /*var jokes = JokeList.jokes
-        set(jokelist) {
-            field=jokelist
+class JokeAdapter() : RecyclerView.Adapter<JokeAdapter.JokeViewHolder>() {
+
+    var jokeList: List<Joke> = emptyList()
+        set(jokes) {
+            field = jokes
             notifyDataSetChanged()
-        }*/
+        }
 
-    class JokeViewHolder(val t: TextView) : RecyclerView.ViewHolder(t)
+    class JokeViewHolder(val tview: TextView) : RecyclerView.ViewHolder(tview)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JokeViewHolder {
         // create a new view
@@ -27,12 +26,10 @@ class JokeAdapter(private val jokes: List<Joke>) : RecyclerView.Adapter<JokeAdap
     }
 
     override fun getItemCount(): Int {
-        return jokes.size
+        return jokeList.size
     }
 
     override fun onBindViewHolder(holder: JokeViewHolder, position: Int) {
-        holder.t.text=jokes[position].value
+        holder.tview.text=jokeList[position].value
     }
-
-
 }

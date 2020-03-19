@@ -5,7 +5,7 @@ import retrofit2.http.GET
 
 interface JokeApiService
 {
-    @GET("url_path_extension")
+    @GET("random/")
     fun giveMeAJoke(): Single<Joke>
 
 }
