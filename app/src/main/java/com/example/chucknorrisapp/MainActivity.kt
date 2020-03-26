@@ -5,10 +5,12 @@ import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlin.math.log
 
 class MainActivity : Activity() {
     private val disposables = CompositeDisposable()
@@ -20,17 +22,34 @@ class MainActivity : Activity() {
 
 
         Log.d("sorted", JokeList.jokes.toString())
+        val adapter=JokeAdapter()
 
         rvjokes.layoutManager = LinearLayoutManager(this)
         val jokeService= JokeApiServiceFactory.service()
-        disposables.add( jokeService.giveMeAJoke().subscribeOn(Schedulers.io()).subscribeBy(
-            onSuccess = {Log.d("Trump", it.toString())},
+        disposables.add( jokeService.giveMeAJoke().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribeBy(
+            //onSuccess = {Log.d("Trump", it.toString())},
+            onSuccess = {
+                adapter.addJoke(it)
+            },
             onError = {Log.e("Warren", "fail",it)}
         ))
-        val jokeList = JokeList.jokes.toJokes()
-        val adapter=JokeAdapter()
-        adapter.jokeList = jokeList
+        //val jokeList = JokeList.jokes.toJokes()
+
+        //adapter.jokeList = jokeList
         rvjokes.adapter=adapter
+
+        addjokebtn.setOnClickListener {
+            disposables.add( jokeService.giveMeAJoke().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribeBy(
+                //onSuccess = {Log.d("Trump", it.toString())},
+                onSuccess = {
+                    adapter.addJoke(it)
+                },
+                onError = {Log.e("Warren", "fail",it)}
+            ))
+
+        }
+
+
 
     }
 

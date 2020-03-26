@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 class JokeAdapter() : RecyclerView.Adapter<JokeAdapter.JokeViewHolder>() {
 
-    var jokeList: List<Joke> = emptyList()
+    var jokeList: MutableList<Joke> = mutableListOf()
         set(jokes) {
             field = jokes
             notifyDataSetChanged()
@@ -31,5 +31,10 @@ class JokeAdapter() : RecyclerView.Adapter<JokeAdapter.JokeViewHolder>() {
 
     override fun onBindViewHolder(holder: JokeViewHolder, position: Int) {
         holder.tview.text=jokeList[position].value
+    }
+
+    fun addJoke (joke : Joke ){
+        jokeList.add(joke)
+        notifyDataSetChanged()
     }
 }
