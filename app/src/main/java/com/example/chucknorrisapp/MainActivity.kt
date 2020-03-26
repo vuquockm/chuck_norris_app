@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.Bundle
 import android.util.Log
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -39,12 +40,16 @@ class MainActivity : Activity() {
         rvjokes.adapter=adapter
 
         addjokebtn.setOnClickListener {
+            progressBar.isVisible=true
+            //Thread.sleep(4000)
             disposables.add( jokeService.giveMeAJoke().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribeBy(
                 //onSuccess = {Log.d("Trump", it.toString())},
                 onSuccess = {
                     adapter.addJoke(it)
+                    progressBar.isVisible=false
                 },
                 onError = {Log.e("Warren", "fail",it)}
+
             ))
 
         }
