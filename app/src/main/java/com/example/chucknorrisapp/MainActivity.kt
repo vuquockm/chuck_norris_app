@@ -27,13 +27,18 @@ class MainActivity : Activity() {
 
         rvjokes.layoutManager = LinearLayoutManager(this)
         val jokeService= JokeApiServiceFactory.service()
-        disposables.add( jokeService.giveMeAJoke().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribeBy(
+
+
+        disposables.add( jokeService.giveMeAJoke().repeat(10).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribeBy(
             //onSuccess = {Log.d("Trump", it.toString())},
-            onSuccess = {
+            onNext = {
                 adapter.addJoke(it)
             },
-            onError = {Log.e("Warren", "fail",it)}
+            onComplete = {Log.e("Warren", "success")}
+
         ))
+
+
         //val jokeList = JokeList.jokes.toJokes()
 
         //adapter.jokeList = jokeList
@@ -42,13 +47,13 @@ class MainActivity : Activity() {
         addjokebtn.setOnClickListener {
             progressBar.isVisible=true
             //Thread.sleep(4000)
-            disposables.add( jokeService.giveMeAJoke().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribeBy(
+            disposables.add( jokeService.giveMeAJoke().repeat(10).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribeBy(
                 //onSuccess = {Log.d("Trump", it.toString())},
-                onSuccess = {
+                onNext = {
                     adapter.addJoke(it)
                     progressBar.isVisible=false
                 },
-                onError = {Log.e("Warren", "fail",it)}
+                onComplete = {Log.e("Warren", "loadboard")}
 
             ))
 
