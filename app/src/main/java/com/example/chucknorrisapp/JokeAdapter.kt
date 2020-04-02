@@ -2,17 +2,20 @@ package com.example.chucknorrisapp
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.AbsListView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 
-class JokeAdapter() : RecyclerView.Adapter<JokeAdapter.JokeViewHolder>() {
+class JokeAdapter(var onBottomReached:(JokeAdapter)->Unit) : RecyclerView.Adapter<JokeAdapter.JokeViewHolder>() {
 
     var jokeList: MutableList<Joke> = mutableListOf()
         set(jokes) {
             field = jokes
             notifyDataSetChanged()
         }
+
+
 
     class JokeViewHolder(val tview: TextView) : RecyclerView.ViewHolder(tview)
 
@@ -37,4 +40,7 @@ class JokeAdapter() : RecyclerView.Adapter<JokeAdapter.JokeViewHolder>() {
         jokeList.add(joke)
         notifyDataSetChanged()
     }
+
+
+
 }

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.subscribeBy
@@ -21,12 +22,24 @@ class MainActivity : Activity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
+        val jokeService= JokeApiServiceFactory.service()
         Log.d("sorted", JokeList.jokes.toString())
-        val adapter=JokeAdapter()
+        val onBottomReach : (adapter:JokeAdapter)-> Unit= {adapter->
+            progressBar.isVisible=true
+            Thread.sleep(5000)
+            disposables.add( jokeService.giveMeAJoke().repeat(10).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribeBy(
+                //onSuccess = {Log.d("Trump", it.toString())},
+                onNext = {
+                    adapter.addJoke(it)
+                    progressBar.isVisible=false
+                },
+                onComplete = {Log.e("Warren", "loadboard")}
+
+            ))}
+        val adapter=JokeAdapter(onBottomReach)
 
         rvjokes.layoutManager = LinearLayoutManager(this)
-        val jokeService= JokeApiServiceFactory.service()
+
 
 
         disposables.add( jokeService.giveMeAJoke().repeat(10).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribeBy(
@@ -43,8 +56,18 @@ class MainActivity : Activity() {
 
         //adapter.jokeList = jokeList
         rvjokes.adapter=adapter
+        rvjokes.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if(!recyclerView.canScrollVertically(1)){
+                    (rvjokes.adapter as JokeAdapter).onBottomReached(rvjokes.adapter as JokeAdapter)
+                }
+            }
 
-        addjokebtn.setOnClickListener {
+        })
+
+/*
+        .setOnClickListener {
             progressBar.isVisible=true
             //Thread.sleep(4000)
             disposables.add( jokeService.giveMeAJoke().repeat(10).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribeBy(
@@ -58,6 +81,8 @@ class MainActivity : Activity() {
             ))
 
         }
+
+ */
 
 
 
