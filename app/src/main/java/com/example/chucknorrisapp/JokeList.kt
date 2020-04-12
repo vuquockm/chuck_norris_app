@@ -1,5 +1,6 @@
 package com.example.chucknorrisapp
 
+
 object JokeList {
     val jokes = listOf("Chuck Norris went out of an infinite loop.",
         "Chuck Norris doesn't use a computer because a computer does " +
@@ -21,6 +22,7 @@ object JokeList {
         "product of history's most expensive visual effect. When adjusted for inflation, " +
         "the effect cost more than the Gross National Product of Paraguay."
     )
+
 
 
 }

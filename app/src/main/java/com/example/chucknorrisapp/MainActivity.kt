@@ -12,11 +12,17 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.builtins.list
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonConfiguration
+import kotlinx.serialization.parse
+import kotlinx.serialization.stringify
 import kotlin.math.log
 
 class MainActivity : Activity() {
     private val disposables = CompositeDisposable()
-
+    private var adapter: JokeAdapter = JokeAdapter{}
     //@SuppressLint("CheckResult")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,7 +32,7 @@ class MainActivity : Activity() {
         Log.d("sorted", JokeList.jokes.toString())
         val onBottomReach : (adapter:JokeAdapter)-> Unit= {adapter->
             progressBar.isVisible=true
-            Thread.sleep(5000)
+            //Thread.sleep(5000)
             disposables.add( jokeService.giveMeAJoke().repeat(10).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribeBy(
                 //onSuccess = {Log.d("Trump", it.toString())},
                 onNext = {
@@ -36,20 +42,31 @@ class MainActivity : Activity() {
                 onComplete = {Log.e("Warren", "loadboard")}
 
             ))}
-        val adapter=JokeAdapter(onBottomReach)
+        adapter=JokeAdapter(onBottomReach)
 
         rvjokes.layoutManager = LinearLayoutManager(this)
 
 
+        val variable= savedInstanceState?.getString("Serializable")
+        if (variable!=null){
+            val jokes = Json(JsonConfiguration.Stable).parse(Joke.serializer().list, variable.toString())
+            Log.d("troll", jokes.toString())
+            adapter.jokeList= jokes as MutableList<Joke>
 
-        disposables.add( jokeService.giveMeAJoke().repeat(10).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribeBy(
-            //onSuccess = {Log.d("Trump", it.toString())},
-            onNext = {
-                adapter.addJoke(it)
-            },
-            onComplete = {Log.e("Warren", "success")}
+        }
+        else{
+            disposables.add( jokeService.giveMeAJoke().repeat(10).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribeBy(
+                //onSuccess = {Log.d("Trump", it.toString())},
+                onNext = {
+                    adapter.addJoke(it)
+                },
+                onComplete = {Log.e("Warren", "success")}
 
-        ))
+            ))
+
+
+        }
+
 
 
         //val jokeList = JokeList.jokes.toJokes()
@@ -65,6 +82,7 @@ class MainActivity : Activity() {
             }
 
         })
+
 
 /*
         .setOnClickListener {
@@ -82,8 +100,8 @@ class MainActivity : Activity() {
 
         }
 
- */
 
+ */
 
 
     }
@@ -91,6 +109,14 @@ class MainActivity : Activity() {
     override fun onStop() {
         disposables.clear()
         super.onStop()
+
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        val joke = Json(JsonConfiguration.Stable).stringify<MutableList<Joke>>(Joke.serializer().list, adapter.jokeList)
+        outState.putString("Serializable",joke)
 
     }
 
