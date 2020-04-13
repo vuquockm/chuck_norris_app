@@ -46,6 +46,21 @@ class MainActivity : Activity() {
 
         rvjokes.layoutManager = LinearLayoutManager(this)
 
+        val jokeTouchHelper=JokeTouchHelper(
+            onItemMoved = {start:Int, end:Int ->
+
+                    adapter.jokeList.swap(start, end)
+                    adapter.notifyItemMoved(start,end)
+                    true
+
+            },
+            onJokeRemoved = {position: Int ->
+                adapter.jokeList.removeAt(position)
+                adapter.notifyItemRemoved(position)
+            }
+        )
+        jokeTouchHelper.attachToRecyclerView(rvjokes)
+
 
         val variable= savedInstanceState?.getString("Serializable")
         if (variable!=null){
@@ -126,6 +141,12 @@ class MainActivity : Activity() {
 
     fun List<String>.toJokes() = map{it.toJoke()}
     //forgot comment
+
+    fun MutableList<Joke>.swap(index1: Int, index2: Int) {
+        val tmp = this[index1] // 'this' corresponds to the list
+        this[index1] = this[index2]
+        this[index2] = tmp
+    }
 
 }
 
