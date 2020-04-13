@@ -1,6 +1,7 @@
 package com.example.chucknorrisapp
 
 import android.content.Context
+import android.content.Intent
 import android.util.AttributeSet
 import android.util.Log
 import android.view.InflateException
@@ -10,6 +11,7 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat.startActivity
 import androidx.core.view.marginLeft
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.joke_layout.view.*
@@ -35,6 +37,14 @@ class JokeView @JvmOverloads constructor(
         //inflate(context,R.layout.joke_layout,this)
         btnshare.setOnClickListener{
         Log.d("Gbaman", model.id)
+            val sendIntent: Intent = Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, model.text)
+                type = "text/plain"
+            }
+
+            val shareIntent = Intent.createChooser(sendIntent, null)
+            startActivity(context,shareIntent,null)
         }
         btnfav.setOnClickListener{
         Log.d("Kemar",model.id)
