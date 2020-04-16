@@ -1,7 +1,7 @@
 package com.example.chucknorrisapp
 
-import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import androidx.core.view.isVisible
@@ -12,13 +12,10 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.list
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonConfiguration
-import kotlinx.serialization.parse
-import kotlinx.serialization.stringify
-import kotlin.math.log
+
 
 class MainActivity : Activity() {
     private val disposables = CompositeDisposable()
@@ -27,6 +24,17 @@ class MainActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        //get jokes from SharedPref if any
+        // get shared preferences
+        val pref: SharedPreferences = this.getSharedPreferences("jokePref", 0) // 0 - for private mode
+        val editor: SharedPreferences.Editor = pref.edit()
+        val strJokes=pref.getString("jokes", null)
+        //if strJokes is null create jokeList
+        var jokes :MutableList<Joke> =  mutableListOf()
+        if (strJokes != null){
+            jokes = Json(JsonConfiguration.Stable).parse(Joke.serializer().list, strJokes.toString()) as MutableList<Joke>
+        }
 
         val jokeService= JokeApiServiceFactory.service()
         Log.d("sorted", JokeList.jokes.toString())
@@ -61,12 +69,13 @@ class MainActivity : Activity() {
         )
         jokeTouchHelper.attachToRecyclerView(rvjokes)
 
-
+        adapter.jokeList=jokes
         val variable= savedInstanceState?.getString("Serializable")
         if (variable!=null){
-            val jokes = Json(JsonConfiguration.Stable).parse(Joke.serializer().list, variable.toString())
-            Log.d("troll", jokes.toString())
-            adapter.jokeList= jokes as MutableList<Joke>
+            val bundleJokes = Json(JsonConfiguration.Stable).parse(Joke.serializer().list, variable.toString())
+            Log.d("troll", bundleJokes.toString())
+            adapter.jokeList= bundleJokes as MutableList<Joke>
+            //adapter.notifyDataSetChanged()
 
         }
         else{
