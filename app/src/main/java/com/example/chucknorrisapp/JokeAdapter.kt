@@ -35,9 +35,9 @@ class JokeAdapter(var onBottomReached:(JokeAdapter)->Unit) : RecyclerView.Adapte
 
 
     override fun onBindViewHolder(holder: JokeViewHolder, position: Int) {
-        val textjoke=jokeList[position].value
-        val idjoke=jokeList[position].id
-        val model:JokeView.Model=JokeView.Model(textjoke,R.drawable.ic_share_black_24dp,R.drawable.ic_star_border_black_24dp, idjoke)
+        //val textjoke=jokeList[position].value
+        //val idjoke=jokeList[position].id
+        val model:JokeView.Model=JokeView.Model(jokeList[position])
         holder.jokeview.setupView(model)
     }
 
