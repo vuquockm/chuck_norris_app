@@ -1,48 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout"
-    android:layout_width="match_parent"
+<com.example.chucknorrisapp.JokeView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@drawable/rect_background"
+    android:elevation="5dp"
     android:layout_height="wrap_content"
+    android:layout_width="match_parent"
     android:layout_marginBottom="5dp"
-    android:padding="10dp"
-    android:elevation="4dp"
-    >
+    android:layout_marginTop="5dp"
+    android:layout_marginEnd="10dp"
+    android:layout_marginStart="10dp">
 
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-
-        android:background="@drawable/rect_background"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        tools:layout_editor_absoluteY="20dp">
-
-
-        <TextView
-            android:id="@+id/textview"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:layout_weight="1"
-            android:textColor="#000"
-            android:textSize="20sp">
-
-        </TextView>
-
-        <ImageButton
-            android:id="@+id/btnshare"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:src="@drawable/ic_share_black_24dp" />
-
-        <ImageButton
-            android:id="@+id/btnfav"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_star_border_black_24dp" />
-    </LinearLayout>
-</merge>
+</com.example.chucknorrisapp.JokeView>
