@@ -7,6 +7,7 @@ import android.util.Log
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.subscribeBy
@@ -25,6 +26,7 @@ class MainActivity : Activity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
         //get jokes from SharedPref if any
         // get shared preferences
         val pref: SharedPreferences = this.getSharedPreferences("jokePref", 0) // 0 - for private mode
@@ -38,19 +40,44 @@ class MainActivity : Activity() {
 
         val jokeService= JokeApiServiceFactory.service()
         Log.d("sorted", JokeList.jokes.toString())
-        val onBottomReach : (adapter:JokeAdapter)-> Unit= {adapter->
-            progressBar.isVisible=true
-            //Thread.sleep(5000)
+
+        var firstLoad = true
+
+        adapter=JokeAdapter{
+            // avoid calling onBottomReached when first loading of data
+            if (!firstLoad){
+                progressBar.isVisible = true
+                disposables.add(
+                    jokeService.giveMeAJoke().repeat(10).subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread()).subscribeBy(
+                            onNext = {
+                                adapter.addJoke(it)
+                            },
+                            onComplete = {
+                                Log.e("List of jokes", adapter.jokeList.toString())
+                                progressBar.isVisible=false
+                            }
+                        )
+                )
+            }
+        }
+
+        //set on refresh
+        swipeRefresh.setOnRefreshListener{
+            firstLoad = true
+            // deep copy the list
+            adapter.jokeList= jokes.map { it.copy() } as MutableList<Joke>
             disposables.add( jokeService.giveMeAJoke().repeat(10).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribeBy(
-                //onSuccess = {Log.d("Trump", it.toString())},
                 onNext = {
                     adapter.addJoke(it)
-                    progressBar.isVisible=false
                 },
-                onComplete = {Log.e("Warren", "loadboard")}
+                onComplete = {
+                    firstLoad = false
+                    swipeRefresh.isRefreshing=false
+                }
 
-            ))}
-        adapter=JokeAdapter(onBottomReach)
+            ))
+        }
 
         rvjokes.layoutManager = LinearLayoutManager(this)
 
@@ -69,14 +96,13 @@ class MainActivity : Activity() {
         )
         jokeTouchHelper.attachToRecyclerView(rvjokes)
 
-        adapter.jokeList=jokes
+        adapter.jokeList=jokes.map { it.copy() } as MutableList<Joke> // deep copy otherwise lists are the sames
         val variable= savedInstanceState?.getString("Serializable")
         if (variable!=null){
             val bundleJokes = Json(JsonConfiguration.Stable).parse(Joke.serializer().list, variable.toString())
             Log.d("troll", bundleJokes.toString())
             adapter.jokeList= bundleJokes as MutableList<Joke>
-            //adapter.notifyDataSetChanged()
-
+            firstLoad=false
         }
         else{
             disposables.add( jokeService.giveMeAJoke().repeat(10).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribeBy(
@@ -84,48 +110,20 @@ class MainActivity : Activity() {
                 onNext = {
                     adapter.addJoke(it)
                 },
-                onComplete = {Log.e("Warren", "success")}
-
-            ))
-
-
-        }
-
-
-
-        //val jokeList = JokeList.jokes.toJokes()
-
-        //adapter.jokeList = jokeList
-        rvjokes.adapter=adapter
-        rvjokes.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                if(!recyclerView.canScrollVertically(1)){
-                    (rvjokes.adapter as JokeAdapter).onBottomReached(rvjokes.adapter as JokeAdapter)
+                onComplete = {
+                    Log.e("Warren", "success")
+                    firstLoad = false
                 }
-            }
-
-        })
-
-
-/*
-        .setOnClickListener {
-            progressBar.isVisible=true
-            //Thread.sleep(4000)
-            disposables.add( jokeService.giveMeAJoke().repeat(10).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribeBy(
-                //onSuccess = {Log.d("Trump", it.toString())},
-                onNext = {
-                    adapter.addJoke(it)
-                    progressBar.isVisible=false
-                },
-                onComplete = {Log.e("Warren", "loadboard")}
 
             ))
+
 
         }
 
 
- */
+        rvjokes.adapter=adapter
+
+
 
 
     }
