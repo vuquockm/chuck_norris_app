@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat.startActivity
 import kotlinx.android.synthetic.main.joke_layout.view.*
+import kotlinx.android.synthetic.main.joke_view_layout.view.*
 import kotlinx.serialization.builtins.list
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonConfiguration
@@ -20,12 +21,8 @@ class JokeView @JvmOverloads constructor(
     var btnstate=R.drawable.ic_star_border_black_24dp
 
 
-    //val layout:View= LayoutInflater.from(context).inflate(R.layout.joke_layout,null)
     init {
-        LayoutInflater.from(context).inflate(R.layout.joke_layout,this,true)
-
-
-
+        LayoutInflater.from(context).inflate(R.layout.joke_view_layout,this,true)
     }
 
 
