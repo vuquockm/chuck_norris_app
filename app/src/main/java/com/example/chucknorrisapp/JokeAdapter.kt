@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 
-class JokeAdapter(var onBottomReached:(JokeAdapter)->Unit) : RecyclerView.Adapter<JokeAdapter.JokeViewHolder>() {
+class JokeAdapter(var onBottomReached:()->Unit) : RecyclerView.Adapter<JokeAdapter.JokeViewHolder>() {
 
     var jokeList: MutableList<Joke> = mutableListOf()
         set(jokes) {
@@ -21,10 +21,10 @@ class JokeAdapter(var onBottomReached:(JokeAdapter)->Unit) : RecyclerView.Adapte
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JokeViewHolder {
         // create a new view
-        //val textView = LayoutInflater.from(parent.context)
-        //   .inflate(R.layout.joke_layout, parent, false) as TextView
+        val jokeView = LayoutInflater.from(parent.context)
+           .inflate(R.layout.joke_layout, parent, false) as JokeView
         // set the view's size, margins, paddings and layout parameters
-        val jokeView=JokeView(parent.context)
+        //val jokeView=JokeView(parent.context)
 
         return JokeViewHolder(jokeView)
     }
@@ -35,8 +35,10 @@ class JokeAdapter(var onBottomReached:(JokeAdapter)->Unit) : RecyclerView.Adapte
 
 
     override fun onBindViewHolder(holder: JokeViewHolder, position: Int) {
-        //val textjoke=jokeList[position].value
-        //val idjoke=jokeList[position].id
+        // if scrolled to last element, call onBottomReached
+        if (position == jokeList.size - 1){
+            onBottomReached()
+        }
         val model:JokeView.Model=JokeView.Model(jokeList[position])
         holder.jokeview.setupView(model)
     }
