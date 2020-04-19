@@ -6,8 +6,6 @@ import android.os.Bundle
 import android.util.Log
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.subscribeBy
@@ -64,6 +62,16 @@ class MainActivity : Activity() {
 
         //set on refresh
         swipeRefresh.setOnRefreshListener{
+            //get jokes from SharedPref if any
+            // get shared preferences
+            val pref: SharedPreferences = this.getSharedPreferences("jokePref", 0) // 0 - for private mode
+            val editor: SharedPreferences.Editor = pref.edit()
+            val strJokes=pref.getString("jokes", null)
+            //if strJokes is null create jokeList
+            var jokes :MutableList<Joke> =  mutableListOf()
+            if (strJokes != null){
+                jokes = Json(JsonConfiguration.Stable).parse(Joke.serializer().list, strJokes.toString()) as MutableList<Joke>
+            }
             firstLoad = true
             // deep copy the list
             adapter.jokeList= jokes.map { it.copy() } as MutableList<Joke>
